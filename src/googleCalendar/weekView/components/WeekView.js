@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Row, Col} from 'antd';
 import moment from 'moment';
 
@@ -52,8 +52,7 @@ const style = {
   },
 };
 
-function getAllDaysInTheWeek (startTimeStamp = Date.now ()) {
-  const currentDate = moment (startTimeStamp);
+function getAllDaysInTheWeek (currentDate = moment ()) {
   const weekStart = currentDate.clone ().startOf ('week');
 
   const days = Array.from (Array (7))
@@ -68,40 +67,69 @@ function getAllDaysInTheWeek (startTimeStamp = Date.now ()) {
   return days;
 }
 
-function WeekView (props) {
-  const weekDays = getAllDaysInTheWeek ();
-  return (
-    <div>
-      {/* WeekDays */}
-      <Row type="flex">
-        <Col style={{...style.col, ...style.weekDays}} span={3} />
+class WeekView extends Component {
+  state = {
+    startDate: +moment (),
+    weekDays: getAllDaysInTheWeek (),
+  };
+
+  goToNextWeek = () => {
+    const dateAfter7Days = moment (this.state.startDate).add (7, 'days');
+    this.setState ({
+      startDate: +dateAfter7Days,
+      weekDays: getAllDaysInTheWeek (dateAfter7Days),
+    });
+  };
+
+  goToPreviousWeek = () => {
+    const dateBefore7Days = moment (this.state.startDate).subtract (7, 'days');
+    this.setState ({
+      startDate: +dateBefore7Days,
+      weekDays: getAllDaysInTheWeek (dateBefore7Days),
+    });
+  };
+
+  render () {
+    const {weekDays} = this.state;
+    return (
+      <div>
+        {/* Toolbar */}
+        <Row type="flex" gutter={4}>
+          <Col><a onClick={this.goToPreviousWeek}>Previous</a></Col>
+          <Col><a onClick={this.goToNextWeek}>Next</a></Col>
+        </Row>
+
+        {/* WeekDays */}
+        <Row type="flex">
+          <Col style={{...style.col, ...style.weekDays}} span={3} />
+          <React.Fragment>
+            {weekDays.map (day => (
+              <Col style={{...style.col, ...style.weekDays}} span={3}>
+                <p style={style.weekDayName}>{day.weekDayName}</p>
+                <p style={style.weekDayName}>{day.date}</p>
+              </Col>
+            ))}
+          </React.Fragment>
+        </Row>
+
+        {/* Slots */}
         <React.Fragment>
-          {weekDays.map (day => (
-            <Col style={{...style.col, ...style.weekDays}} span={3}>
-              <p style={style.weekDayName}>{day.weekDayName}</p>
-              <p style={style.weekDayName}>{day.date}</p>
-            </Col>
+          {times.map (time => (
+            <Row type="flex">
+              <Col style={{...style.col, ...style.slot}} span={3}>
+                <span style={style.time}>{time}</span>
+              </Col>
+              <React.Fragment>
+                {weekDays.map (day => (
+                  <Col style={{...style.col, ...style.slot}} span={3} />
+                ))}
+              </React.Fragment>
+            </Row>
           ))}
         </React.Fragment>
-      </Row>
-
-      {/* Slots */}
-      <React.Fragment>
-        {times.map (time => (
-          <Row type="flex">
-            <Col style={{...style.col, ...style.slot}} span={3}>
-              <span style={style.time}>{time}</span>
-            </Col>
-            <React.Fragment>
-              {weekDays.map (day => (
-                <Col style={{...style.col, ...style.slot}} span={3} />
-              ))}
-            </React.Fragment>
-          </Row>
-        ))}
-      </React.Fragment>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default WeekView;
