@@ -19,7 +19,7 @@ function AddEventModal (props) {
       <Input
         type="text"
         placeholder="Add Title"
-        value={props.currentEvent.title}
+        value={props.eventTitle}
         style={{border: 'none', marginTop: 10}}
         size="large"
         autoFocus={true}
@@ -27,15 +27,12 @@ function AddEventModal (props) {
       />
       <RangePicker
         showTime={{format: 'HH:mm'}}
-        value={[
-          moment (props.currentEvent.startTimeStamp),
-          moment (props.currentEvent.endTimeStamp),
-        ]}
+        value={[moment (props.initialStartTime), moment (props.initialEndTime)]}
         onChange={props.onTimeChange}
         showTime={{
           defaultValue: [
-            moment (props.currentEvent.startTimeStamp),
-            moment (props.currentEvent.endTimeStamp),
+            moment (props.initialStartTime),
+            moment (props.initialEndTime),
           ],
         }}
         format="MMM, YYYY Do  hh a"

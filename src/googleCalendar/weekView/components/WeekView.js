@@ -47,6 +47,7 @@ const style = {
   },
   slot: {
     height: 40,
+    cursor: 'pointer',
   },
   time: {
     fontSize: 10,
@@ -79,6 +80,8 @@ class WeekView extends Component {
       startTimeStamp: null,
       endTimeStamp: null,
     },
+    // Might store it in a better DS such that searching is less costly!
+    allEvents: [],
   };
 
   goToNextWeek = () => {
@@ -109,8 +112,8 @@ class WeekView extends Component {
         showAddEventModal: true,
         currentEvent: {
           ...previousState.currentEvent,
-          startTimeStamp,
-          endTimeStamp,
+          startTimeStamp: +startTimeStamp,
+          endTimeStamp: +endTimeStamp,
         },
       };
     });
@@ -123,10 +126,15 @@ class WeekView extends Component {
   };
 
   onOkAddEventModal = () => {
-    // Add event logic goes here!
-    this.setState ({
+    this.setState (previousState => ({
+      allEvents: [...previousState.allEvents, previousState.currentEvent],
       showAddEventModal: false,
-    });
+      currentEvent: {
+        title: '',
+        startTimeStamp: null,
+        endTimeStamp: null,
+      },
+    }));
   };
 
   onTitleChange = title => {
@@ -157,7 +165,9 @@ class WeekView extends Component {
           visible={showAddEventModal}
           onCancel={this.onCloseAddEventModal}
           onOk={this.onOkAddEventModal}
-          currentEvent={currentEvent}
+          eventTitle={currentEvent.title}
+          initialStartTime={currentEvent.startTimeStamp}
+          initialEndTime={currentEvent.endTimeStamp}
           onTitleChange={this.onTitleChange}
           onTimeChange={this.onCurrentEventTimeChange}
         />
