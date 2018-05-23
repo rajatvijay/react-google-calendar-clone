@@ -26,16 +26,18 @@ function AddEventModal (props) {
         onChange={e => props.onTitleChange (e.target.value)}
       />
       <RangePicker
-        showTime={{format: 'HH:mm'}}
         value={[moment (props.initialStartTime), moment (props.initialEndTime)]}
         onChange={props.onTimeChange}
         showTime={{
+          format: 'HH:mm',
+          hourStep: 1,
+          minuteStep: 30,
           defaultValue: [
             moment (props.initialStartTime),
             moment (props.initialEndTime),
           ],
         }}
-        format="MMM, YYYY Do  hh a"
+        format="MMM Do, YYYY hh:mm a"
       />
     </Modal>
   );
