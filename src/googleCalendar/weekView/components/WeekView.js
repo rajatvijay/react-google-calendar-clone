@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'antd';
 import moment from 'moment';
+import AddEventModal from './addEventModal';
 
+// TODO: Fix this!
 const times = [
   '1',
   '2',
@@ -27,7 +29,7 @@ const times = [
   '22',
   '23',
   '24',
-];
+].map (time => Number (time));
 
 const style = {
   col: {
@@ -71,6 +73,12 @@ class WeekView extends Component {
   state = {
     startDate: +moment (),
     weekDays: getAllDaysInTheWeek (),
+    showAddEventModal: false,
+    currentEvent: {
+      title: '',
+      startTimeStamp: null,
+      endTimeStamp: null,
+    },
   };
 
   goToNextWeek = () => {
@@ -89,10 +97,71 @@ class WeekView extends Component {
     });
   };
 
+  openAddEventModal = (dateStamp, time) => {
+    const startTimeStamp = moment (dateStamp)
+      .set ('hour', time)
+      .set ('minutes', 0)
+      .set ('seconds', 0);
+    const endTimeStamp = startTimeStamp.clone ().add (1, 'hour');
+
+    this.setState (previousState => {
+      return {
+        showAddEventModal: true,
+        currentEvent: {
+          ...previousState.currentEvent,
+          startTimeStamp,
+          endTimeStamp,
+        },
+      };
+    });
+  };
+
+  onCloseAddEventModal = () => {
+    this.setState ({
+      showAddEventModal: false,
+    });
+  };
+
+  onOkAddEventModal = () => {
+    // Add event logic goes here!
+    this.setState ({
+      showAddEventModal: false,
+    });
+  };
+
+  onTitleChange = title => {
+    this.setState (previousState => ({
+      currentEvent: {
+        ...previousState.currentEvent,
+        title,
+      },
+    }));
+  };
+
+  onCurrentEventTimeChange = dates => {
+    this.setState (previousState => ({
+      currentEvent: {
+        ...previousState.currentEvent,
+        startTimeStamp: +dates[0],
+        endTimeStamp: +dates[1],
+      },
+    }));
+  };
+
   render () {
-    const {weekDays} = this.state;
+    const {weekDays, showAddEventModal, currentEvent} = this.state;
     return (
       <div>
+        {/* Add Event Modal */}
+        <AddEventModal
+          visible={showAddEventModal}
+          onCancel={this.onCloseAddEventModal}
+          onOk={this.onOkAddEventModal}
+          currentEvent={currentEvent}
+          onTitleChange={this.onTitleChange}
+          onTimeChange={this.onCurrentEventTimeChange}
+        />
+
         {/* Toolbar */}
         <Row type="flex" gutter={4}>
           <Col><a onClick={this.goToPreviousWeek}>Previous</a></Col>
@@ -121,7 +190,11 @@ class WeekView extends Component {
               </Col>
               <React.Fragment>
                 {weekDays.map (day => (
-                  <Col style={{...style.col, ...style.slot}} span={3} />
+                  <Col
+                    style={{...style.col, ...style.slot}}
+                    span={3}
+                    onClick={() => this.openAddEventModal (day.timeStamp, time)}
+                  />
                 ))}
               </React.Fragment>
             </Row>
