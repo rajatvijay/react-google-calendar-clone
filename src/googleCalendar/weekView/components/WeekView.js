@@ -70,6 +70,19 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
   return days;
 }
 
+const EventDisplayer = props => (
+  <div
+    style={{
+      position: 'absolute',
+      top: props.top,
+      left: 0,
+      height: props.highlightHeight,
+      right: 0,
+      background: 'green',
+    }}
+  />
+);
+
 class WeekView extends Component {
   state = {
     startDate: +moment (),
@@ -81,7 +94,7 @@ class WeekView extends Component {
       endTimeStamp: null,
     },
     // Might store it in a better DS such that searching is less costly!
-    allEvents: [],
+    allEvents: {},
   };
 
   goToNextWeek = () => {
@@ -125,16 +138,51 @@ class WeekView extends Component {
     });
   };
 
+  getHeightValueForEventDisplayer = ({startTimeStamp, endTimeStamp}) => {
+    const duration = moment
+      .duration (moment (endTimeStamp).diff (moment (startTimeStamp)))
+      .as ('hours');
+    console.log ('height', duration * 100);
+    return duration * 100 + '%';
+  };
+
+  getTopValueForEventDiplayer = ({startTimeStamp}) => {
+    const startMinutes = moment (startTimeStamp).minutes ();
+    return startMinutes === 30 ? '50%' : '0';
+  };
+
   onOkAddEventModal = () => {
-    this.setState (previousState => ({
-      allEvents: [...previousState.allEvents, previousState.currentEvent],
-      showAddEventModal: false,
-      currentEvent: {
-        title: '',
-        startTimeStamp: null,
-        endTimeStamp: null,
-      },
-    }));
+    this.setState (previousState => {
+      const startTimeStamp = previousState.currentEvent.startTimeStamp;
+
+      let allEvents;
+      if (previousState.allEvents[[startTimeStamp.toString ()]]) {
+        allEvents = {
+          ...previousState.allEvents,
+          [startTimeStamp.toString ()]: [
+            ...previousState.allEvents[startTimeStamp.toString ()],
+            {
+              ...previousState.currentEvent,
+            },
+          ],
+        };
+      } else {
+        allEvents = {
+          ...previousState.allEvents,
+          [startTimeStamp.toString ()]: [previousState.currentEvent],
+        };
+      }
+
+      return {
+        allEvents,
+        showAddEventModal: false,
+        currentEvent: {
+          title: '',
+          startTimeStamp: null,
+          endTimeStamp: null,
+        },
+      };
+    });
   };
 
   onTitleChange = title => {
@@ -156,8 +204,24 @@ class WeekView extends Component {
     }));
   };
 
+  getEventsForThisTime = (dateStamp, time, allEvents) => {
+    console.log (allEvents, new Date (dateStamp));
+    const startTimeStamp = moment (dateStamp)
+      .set ('hour', time)
+      .set ('minutes', 0)
+      .set ('seconds', 0);
+    const startTimeStampPlus30 = startTimeStamp.clone ().add (30, 'minutes');
+    console.log (new Date (+startTimeStamp), +startTimeStamp);
+    console.log (
+      (allEvents[+startTimeStamp.toString ()] || [])
+        .concat (allEvents[+startTimeStampPlus30.toString ()] || [])
+    );
+
+    return allEvents[+startTimeStamp] || [];
+  };
+
   render () {
-    const {weekDays, showAddEventModal, currentEvent} = this.state;
+    const {weekDays, showAddEventModal, currentEvent, allEvents} = this.state;
     return (
       <div>
         {/* Add Event Modal */}
@@ -204,7 +268,20 @@ class WeekView extends Component {
                     style={{...style.col, ...style.slot}}
                     span={3}
                     onClick={() => this.openAddEventModal (day.timeStamp, time)}
-                  />
+                  >
+                    {this.getEventsForThisTime (
+                      day.timeStamp,
+                      time,
+                      allEvents
+                    ).map (event => (
+                      <EventDisplayer
+                        top={this.getTopValueForEventDiplayer (event)}
+                        highlightHeight={this.getHeightValueForEventDisplayer (
+                          event
+                        )}
+                      />
+                    ))}
+                  </Col>
                 ))}
               </React.Fragment>
             </Row>
