@@ -51,51 +51,6 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
   return days;
 }
 
-function collectEvent (eventCollector, event) {
-  const hour = moment (event.start).hours ();
-  event = segregateEvent ({
-    ...event,
-    hour,
-  });
-  if (eventCollector[hour]) {
-    eventCollector[hour].push (...event);
-  } else {
-    eventCollector[hour] = [...event];
-  }
-  return eventCollector;
-}
-
-function getEventsForWeek (events, startDate) {
-  const weekNo = moment (startDate).week ();
-  return events.reduce ((acc, event) => {
-    if (event.week === weekNo) {
-      return collectEvent (acc, event);
-    }
-  }, {});
-}
-
-function segregateEvent (event) {
-  const start = moment (event.start);
-  const end = moment (event.end);
-  if (start.week () !== end.week ()) {
-    const firstWeekEnd = start
-      .clone ()
-      .endOf ('week')
-      .set ('hours', end.hours ())
-      .set ('minutes', end.minutes ())
-      .set ('seconds', end.seconds ());
-    const lastWeekStart = end
-      .clone ()
-      .startOf ('week')
-      .set ('hours', start.hours ())
-      .set ('minutes', start.minutes ())
-      .set ('seconds', start.seconds ());
-    return [{...event, end: +firstWeekEnd}, {...event, start: +lastWeekStart}];
-  } else {
-    return [event];
-  }
-}
-
 class WeekView extends Component {
   state = {
     startDate: +moment (),
@@ -143,7 +98,6 @@ class WeekView extends Component {
       title,
       start: this.state.eventStart,
       end: this.state.eventEnd,
-      week: moment (this.state.eventStart).week (),
     });
     this.setState ({
       showAddEventModal: false,
@@ -165,8 +119,7 @@ class WeekView extends Component {
       eventEnd,
       startDate,
     } = this.state;
-    const events = getEventsForWeek (this.props.events, startDate);
-    console.log (events);
+    const {events} = this.props;
     return (
       <div>
 
@@ -196,14 +149,18 @@ class WeekView extends Component {
             openAddEventModal={this.openAddEventModal}
           >
             {events[time] &&
-              events[time].map (event => (
-                <EventHighlighter
-                  onEventDelete={this.props.onEventDelete}
-                  onEventUpdate={this.props.onEventUpdate}
-                  key={event.title + event.end + event.start}
-                  event={event}
-                />
-              ))}
+              events[time].map (
+                event =>
+                  event.startWeek <= moment (startDate).week () &&
+                  event.endWeek >= moment (startDate).week () &&
+                  <EventHighlighter
+                    onEventDelete={this.props.onEventDelete}
+                    onEventUpdate={this.props.onEventUpdate}
+                    key={event.title + event.end + event.start}
+                    startDate={startDate}
+                    event={event}
+                  />
+              )}
           </TimeSlotGroup>
         ))}
       </div>
