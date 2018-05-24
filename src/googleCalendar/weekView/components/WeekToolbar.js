@@ -1,6 +1,13 @@
 import {Row, Col, Button, Icon} from 'antd';
 import React from 'react';
-import {toolbar, toolbarDate, appTitle, alignRight, spacify} from '../styles';
+import {
+  toolbar,
+  toolbarDate,
+  appTitle,
+  alignRight,
+  spacify,
+  weekButtons,
+} from '../styles';
 import moment from 'moment';
 
 function WeekToolbar (props) {
@@ -14,7 +21,7 @@ function WeekToolbar (props) {
         <Button onClick={props.goToToday}>Today</Button>
       </Col>
 
-      <Col span={2} style={alignRight}>
+      <Col span={2} style={weekButtons}>
         <Button onClick={props.goToPreviousWeek} style={spacify} icon="left" />
         <Button onClick={props.goToNextWeek} icon="right" />
       </Col>
