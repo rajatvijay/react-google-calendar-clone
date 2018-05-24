@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Row, Col} from 'antd';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
+import WeekToolbar from './WeekToolbar';
 
 // TODO: Fix this!
 const times = [
@@ -176,10 +177,10 @@ class WeekView extends Component {
   };
 
   render () {
-    const {weekDays, showAddEventModal, eventStart, eventEnd} = this.state;
+    const {weekDays, showAddEventModal, eventStart, eventEnd, startDate} = this.state;
     return (
       <div>
-        {/* Add Event Modal */}
+
         <AddEventModal
           visible={showAddEventModal}
           onCancel={this.onCloseAddEventModal}
@@ -189,11 +190,11 @@ class WeekView extends Component {
           onTimeChange={this.onCurrentEventTimeChange}
         />
 
-        {/* Toolbar */}
-        <Row type="flex" gutter={4}>
-          <Col><a onClick={this.goToPreviousWeek}>Previous</a></Col>
-          <Col><a onClick={this.goToNextWeek}>Next</a></Col>
-        </Row>
+        <WeekToolbar
+          goToPreviousWeek={this.goToPreviousWeek}
+          goToNextWeek={this.goToNextWeek}
+          startDate={startDate}
+        />
 
         {/* WeekDays */}
         <Row type="flex">
