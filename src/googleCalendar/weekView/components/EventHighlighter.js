@@ -9,6 +9,9 @@ class EventHighlighter extends Component {
     eventNewEnd: null,
   };
 
+  /**
+   * Deletes the event from the event list
+  */
   deleteEvent = () => {
     this.props.onEventDelete (this.props.event.id);
     this.setState ({
@@ -16,6 +19,10 @@ class EventHighlighter extends Component {
     });
   };
 
+  /**
+   * Updates the event
+   * @param {string} title - Updated title of the event
+   */
   updateEvent = title => {
     this.props.onEventUpdate (this.props.event.id, {
       title,
@@ -27,6 +34,9 @@ class EventHighlighter extends Component {
     });
   };
 
+  /**
+   * Open the edit event modal and initializes the start and end time
+   */
   openEditEventModal = () => {
     this.setState ({
       showEditEventModal: true,
@@ -35,6 +45,10 @@ class EventHighlighter extends Component {
     });
   };
 
+  /**
+   * Set the updated start and end times the state of the event being edited
+   * @param {arr: moment, moment} - Array containing start and end date of the event
+   */
   onCurrentEventTimeChange = dates => {
     console.log ('called');
     this.setState ({

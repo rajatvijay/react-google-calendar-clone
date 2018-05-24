@@ -7,12 +7,19 @@ class AddEventModal extends Component {
     title: '',
   };
 
+  /**
+   * Sets the title in the state
+   * @param {event} event - JS/React event
+   */
   handleTitleChange = event => {
     this.setState ({
       title: event.target.value,
     });
   };
 
+  /**
+   * Updates the event
+   */
   handleOk = () => {
     this.props.onOk (this.state.title);
   };
