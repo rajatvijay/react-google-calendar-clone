@@ -25,9 +25,11 @@ class AddEventModal extends Component {
         onOk={this.handleOk}
         onCancel={this.props.onCancel}
         footer={[
-          <Button key="back" onClick={this.props.onCancel}>Cancel</Button>,
+          <Button key="back" onClick={this.props.onCancel}>
+            {this.props.editMode ? 'Delete' : 'Cancel'}
+          </Button>,
           <Button key="submit" type="primary" onClick={this.handleOk}>
-            Add Event
+            {this.props.editMode ? 'Update Event' : 'Add Event'}
           </Button>,
         ]}
       >

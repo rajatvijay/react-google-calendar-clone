@@ -176,7 +176,8 @@ class WeekView extends Component {
             {events[time] &&
               events[time].map (event => (
                 <EventHighlighter
-                  onEdit={() => this.openAddEventModal (event.start, time)}
+                  onEventDelete={this.props.onEventDelete}
+                  onEventUpdate={this.props.onEventUpdate}
                   key={event.title + event.end + event.start}
                   event={event}
                 />

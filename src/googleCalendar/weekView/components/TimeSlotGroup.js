@@ -39,7 +39,6 @@ function TimeSlotGroup (props) {
           key={day.dateStamp}
           dateStamp={day.dateStamp}
           time={props.time}
-          events={props.events}
           openAddEventModal={props.openAddEventModal}
         />
       ))}
