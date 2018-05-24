@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Row, Col} from 'antd';
 import moment from 'moment';
-import AddEventModal from './addEventModal';
+import AddEventModal from './AddEventModal';
 
 // TODO: Fix this!
 const times = [
@@ -60,7 +60,9 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
 
   const days = Array.from (Array (7))
     .map ((day, index) => index + 1)
-    .map (day => moment (weekStart).add (day, 'days'))
+    .map (day =>
+      moment (weekStart).add (day, 'days').set ('minutes', 0).set ('seconds', 0)
+    )
     .map (momentObj => ({
       date: momentObj.date (),
       dateStamp: +momentObj,
@@ -88,13 +90,8 @@ class WeekView extends Component {
     startDate: +moment (),
     weekDays: getAllDaysInTheWeek (),
     showAddEventModal: false,
-    currentEvent: {
-      title: '',
-      startTimeStamp: null,
-      endTimeStamp: null,
-    },
-    // Might store it in a better DS such that searching is less costly!
-    allEvents: {},
+    eventStart: null,
+    eventEnd: null,
   };
 
   goToNextWeek = () => {
@@ -114,21 +111,13 @@ class WeekView extends Component {
   };
 
   openAddEventModal = (dateStamp, time) => {
-    const startTimeStamp = moment (dateStamp)
-      .set ('hour', time)
-      .set ('minutes', 0)
-      .set ('seconds', 0);
-    const endTimeStamp = startTimeStamp.clone ().add (1, 'hour');
+    const start = moment (dateStamp).set ('hour', time);
+    const end = start.clone ().add (1, 'hour');
 
-    this.setState (previousState => {
-      return {
-        showAddEventModal: true,
-        currentEvent: {
-          ...previousState.currentEvent,
-          startTimeStamp: +startTimeStamp,
-          endTimeStamp: +endTimeStamp,
-        },
-      };
+    this.setState ({
+      showAddEventModal: true,
+      eventStart: +start,
+      eventEnd: +end,
     });
   };
 
@@ -138,70 +127,36 @@ class WeekView extends Component {
     });
   };
 
-  getHeightValueForEventDisplayer = ({startTimeStamp, endTimeStamp}) => {
+  // TODO: revise the logic
+  getCoordinatesForEventHighlighter = (eventStart, eventEnd) => {
     const duration = moment
-      .duration (moment (endTimeStamp).diff (moment (startTimeStamp)))
+      .duration (moment (eventEnd).diff (moment (eventStart)))
       .as ('hours');
-    console.log ('height', duration * 100);
-    return duration * 100 + '%';
+
+    const startMinutes = moment (eventStart).minutes ();
+    return {
+      height: duration * 100 + '%',
+      top: startMinutes === 30 ? '50%' : '0',
+      width: '100%',
+    };
   };
 
-  getTopValueForEventDiplayer = ({startTimeStamp}) => {
-    const startMinutes = moment (startTimeStamp).minutes ();
-    return startMinutes === 30 ? '50%' : '0';
-  };
-
-  onOkAddEventModal = () => {
-    this.setState (previousState => {
-      const startTimeStamp = previousState.currentEvent.startTimeStamp;
-
-      let allEvents;
-      if (previousState.allEvents[[startTimeStamp.toString ()]]) {
-        allEvents = {
-          ...previousState.allEvents,
-          [startTimeStamp.toString ()]: [
-            ...previousState.allEvents[startTimeStamp.toString ()],
-            {
-              ...previousState.currentEvent,
-            },
-          ],
-        };
-      } else {
-        allEvents = {
-          ...previousState.allEvents,
-          [startTimeStamp.toString ()]: [previousState.currentEvent],
-        };
-      }
-
-      return {
-        allEvents,
-        showAddEventModal: false,
-        currentEvent: {
-          title: '',
-          startTimeStamp: null,
-          endTimeStamp: null,
-        },
-      };
+  onOkAddEventModal = title => {
+    this.props.onNewEvent ({
+      title,
+      start: this.state.eventStart,
+      end: this.state.eventEnd,
+    });
+    this.setState ({
+      showAddEventModal: false,
     });
   };
 
-  onTitleChange = title => {
-    this.setState (previousState => ({
-      currentEvent: {
-        ...previousState.currentEvent,
-        title,
-      },
-    }));
-  };
-
   onCurrentEventTimeChange = dates => {
-    this.setState (previousState => ({
-      currentEvent: {
-        ...previousState.currentEvent,
-        startTimeStamp: +dates[0],
-        endTimeStamp: +dates[1],
-      },
-    }));
+    this.setState ({
+      eventStart: +dates[0],
+      eventEnd: +dates[1],
+    });
   };
 
   getEventsForThisTime = (dateStamp, time, allEvents) => {
@@ -221,7 +176,7 @@ class WeekView extends Component {
   };
 
   render () {
-    const {weekDays, showAddEventModal, currentEvent, allEvents} = this.state;
+    const {weekDays, showAddEventModal, eventStart, eventEnd} = this.state;
     return (
       <div>
         {/* Add Event Modal */}
@@ -229,10 +184,8 @@ class WeekView extends Component {
           visible={showAddEventModal}
           onCancel={this.onCloseAddEventModal}
           onOk={this.onOkAddEventModal}
-          eventTitle={currentEvent.title}
-          initialStartTime={currentEvent.startTimeStamp}
-          initialEndTime={currentEvent.endTimeStamp}
-          onTitleChange={this.onTitleChange}
+          eventStart={eventStart}
+          eventEnd={eventEnd}
           onTimeChange={this.onCurrentEventTimeChange}
         />
 
@@ -269,20 +222,7 @@ class WeekView extends Component {
                 style={{...style.col, ...style.slot}}
                 span={3}
                 onClick={() => this.openAddEventModal (day.dateStamp, time)}
-              >
-                {this.getEventsForThisTime (
-                  day.dateStamp,
-                  time,
-                  allEvents
-                ).map (event => (
-                  <EventDisplayer
-                    top={this.getTopValueForEventDiplayer (event)}
-                    highlightHeight={this.getHeightValueForEventDisplayer (
-                      event
-                    )}
-                  />
-                ))}
-              </Col>
+              />
             ))}
           </Row>
         ))}
@@ -292,3 +232,16 @@ class WeekView extends Component {
 }
 
 export default WeekView;
+
+// {this.getEventsForThisTime (
+//   day.dateStamp,
+//   time,
+//   allEvents
+// ).map (event => (
+//   <EventDisplayer
+//     top={this.getTopValueForEventDiplayer (event)}
+//     highlightHeight={this.getHeightValueForEventDisplayer (
+//       event
+//     )}
+//   />
+// ))}
