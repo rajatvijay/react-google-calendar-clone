@@ -4,6 +4,7 @@ import moment from 'moment';
 import AddEventModal from './AddEventModal';
 import WeekToolbar from './WeekToolbar';
 import WeekHeader from './WeekHeader';
+import TimeSlotGroup from './TimeSlotGroup';
 
 // TODO: Fix this!
 const times = [
@@ -207,19 +208,11 @@ class WeekView extends Component {
 
         {/* Slots */}
         {times.map (time => (
-          <Row type="flex" key={time}>
-            <Col style={{...style.col, ...style.slot}} span={3}>
-              <span style={style.time}>{time}</span>
-            </Col>
-            {weekDays.map (day => (
-              <Col
-                key={day.dateStamp}
-                style={{...style.col, ...style.slot}}
-                span={3}
-                onClick={() => this.openAddEventModal (day.dateStamp, time)}
-              />
-            ))}
-          </Row>
+          <TimeSlotGroup
+            time={time}
+            weekDays={weekDays}
+            openAddEventModal={this.openAddEventModal}
+          />
         ))}
       </div>
     );
