@@ -3,6 +3,7 @@ import {Row, Col} from 'antd';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
 import WeekToolbar from './WeekToolbar';
+import WeekHeader from './WeekHeader';
 
 // TODO: Fix this!
 const times = [
@@ -177,7 +178,13 @@ class WeekView extends Component {
   };
 
   render () {
-    const {weekDays, showAddEventModal, eventStart, eventEnd, startDate} = this.state;
+    const {
+      weekDays,
+      showAddEventModal,
+      eventStart,
+      eventEnd,
+      startDate,
+    } = this.state;
     return (
       <div>
 
@@ -196,20 +203,7 @@ class WeekView extends Component {
           startDate={startDate}
         />
 
-        {/* WeekDays */}
-        <Row type="flex">
-          <Col style={{...style.col, ...style.weekDays}} span={3} />
-          {weekDays.map (day => (
-            <Col
-              key={day.dateStamp}
-              style={{...style.col, ...style.weekDays}}
-              span={3}
-            >
-              <p style={style.weekDayName}>{day.weekDayName}</p>
-              <p style={style.weekDayName}>{day.date}</p>
-            </Col>
-          ))}
-        </Row>
+        <WeekHeader weekDays={weekDays} />
 
         {/* Slots */}
         {times.map (time => (
