@@ -16,6 +16,9 @@ class WeekView extends Component {
     eventEnd: null,
   };
 
+  /**
+   * Sets next week days in the state
+  */
   goToNextWeek = () => {
     const dateAfter7Days = moment (this.state.startDate).add (7, 'days');
     this.setState ({
@@ -24,6 +27,9 @@ class WeekView extends Component {
     });
   };
 
+  /**
+   * Sets previous week days in the state
+  */
   goToPreviousWeek = () => {
     const dateBefore7Days = moment (this.state.startDate).subtract (7, 'days');
     this.setState ({
@@ -32,6 +38,10 @@ class WeekView extends Component {
     });
   };
 
+  /**
+   * Opens the add event modal and initialize the date from the cell
+   * @param {timeStamp} dateStamp - DateStamp of the 
+  */
   openAddEventModal = (dateStamp, time) => {
     const start = moment (dateStamp).set ('hour', time);
     const end = start.clone ().add (1, 'hour');

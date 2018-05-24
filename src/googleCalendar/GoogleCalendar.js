@@ -9,11 +9,11 @@ class GoogleCalendar extends Component {
 
   /**
    * Add new event in the event list in the state
-   * @param event :Object
+   * @param {Object} event - Event object
    * {
-   *  start: Time stamp for the start of the event :timeStamp,
-   *  title: Title fo the new event :String,
-   *  end: Time stamp for the end of the event :timeStamp,
+   *  start: {timeStamp} - Time stamp for the start of the event,
+   *  title: {string} - Title fo the new event,
+   *  end: {timeStamp} - Time stamp for the end of the event,
    * }
   */
   addNewEvent = event => {
@@ -28,12 +28,12 @@ class GoogleCalendar extends Component {
 
   /**
    * Updates an already existing event in the state event list
-   * @param event eventID id of the event :String
-   * @param updatedEvent updated details of the event :Object
+   * @param {string} event eventID id of the event
+   * @param {Object} updatedEvent updated details of the event
    * {
-   *  start: Time stamp for the start of the event :timeStamp,
-   *  title: Title fo the new event :String,
-   *  end: Time stamp for the end of the event :timeStamp,
+   *  start: {timeStamp} - Time stamp for the start of the event,
+   *  title: {string} - Title fo the new event,
+   *  end: {timeStamp} - Time stamp for the end of the event,
    * }
   */
   updateEvent = (eventId, updatedEvent) => {
@@ -50,7 +50,7 @@ class GoogleCalendar extends Component {
 
   /**
    * Deletes an event from the event list in the state
-   * @param eventId id of the event :String
+   * @param {String} eventId - Id of the event
   */
   deleteEvent = eventId => {
     this.setState (previousState => {

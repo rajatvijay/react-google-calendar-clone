@@ -1,5 +1,10 @@
 import moment from 'moment';
 
+/**
+   * Generate all days in a week
+   * @param {moment} currentDate - Any date in the week
+   * @returns {array} days - All days in the week with date, dateStamp and weekDayName
+  */
 export const getAllDaysInTheWeek = (currentDate = moment ()) => {
   const weekStart = currentDate.clone ().startOf ('week');
 
@@ -17,6 +22,7 @@ export const getAllDaysInTheWeek = (currentDate = moment ()) => {
   return days;
 };
 
+// All the hours in the day
 export const times = [
   1,
   2,
@@ -43,6 +49,23 @@ export const times = [
   23,
 ];
 
+/**
+   * Generated coordinated for the highlight
+   * @param {Object} event - Event object
+   * {
+   *  start: Time stamp for the start of the event :timeStamp,
+   *  title: Title fo the new event :String,
+   *  end: Time stamp for the end of the event :timeStamp,
+   * }
+   * @param {timeStamp} startDate - Timestamp of any date in the current week
+   * @returns {Object} coordinates - Coordinates object with
+   * {
+   *  top - CSS top of the element,
+   *  left - CSS left of the element,
+   *  width - CSS width of the element,
+   *  height - CSS height of the element
+   * }
+  */
 export const generateWeekViewCoordinates = (event, startDate) => {
   const start = moment (event.start);
   const end = moment (event.end);
