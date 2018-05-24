@@ -2,13 +2,15 @@ import React from 'react';
 import {Row, Col} from 'antd';
 import TimeSlot from './TimeSlot';
 import {col, slot, row, timeCol, timeString} from '../styles';
+import moment from 'moment';
 
 function TimeSlotGroup (props) {
+  const formattedTime = moment ().set ('hours', props.time).format ('h a');
   return (
     <Row type="flex" key={props.time} style={row}>
       <Col style={timeCol} span={3}>
         <span style={timeString}>
-          {props.time <= 12 ? props.time + 'am' : props.time - 12 + 'pm'}
+          {formattedTime}
         </span>
       </Col>
       {props.weekDays.map (day => (
