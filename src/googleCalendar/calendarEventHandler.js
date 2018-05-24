@@ -1,7 +1,6 @@
 import moment from 'moment';
 
 const CalendarEventHandler = (function () {
-
   /**
    * Add event after adding meta data in the event
    * @param {arr} allEvent - Array of all the events
@@ -57,7 +56,7 @@ const CalendarEventHandler = (function () {
   function updateEvent (eventId, updatedEvent, allEvents) {
     Object.keys (allEvents).forEach (time => {
       allEvents[time] = allEvents[time].map (
-        event => (event.id === eventId ? {...event, updatedEvent} : event)
+        event => (event.id === eventId ? {...event, ...updatedEvent} : event)
       );
     });
     return {...allEvents};
