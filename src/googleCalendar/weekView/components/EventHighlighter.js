@@ -45,6 +45,7 @@ function EventHighlighter (props) {
         padding: '2px 4px',
         fontSize: '12px',
         zIndex: 1,
+        cursor: 'pointer',
       }}
     >
       {props.event.title} <br />
