@@ -226,10 +226,7 @@ class WeekView extends Component {
             weekDays={weekDays}
             events={events[time]}
             openAddEventModal={this.openAddEventModal}
-          >
-            {events[time] &&
-              events[time].map (event => <EventHighlighter {...event} />)}
-          </TimeSlotGroup>
+          />
         ))}
       </div>
     );

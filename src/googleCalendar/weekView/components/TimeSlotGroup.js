@@ -1,6 +1,7 @@
 import React from 'react';
 import {Row, Col} from 'antd';
 import TimeSlot from './TimeSlot';
+import EventHighlighter from './EventHighlighter';
 
 // TODO: Remove the duplication
 const style = {
@@ -29,7 +30,7 @@ const style = {
 
 function TimeSlotGroup (props) {
   return (
-    <Row type="flex" key={props.time}>
+    <Row type="flex" key={props.time} style={{position: 'relative'}}>
       <Col style={{...style.col, ...style.slot}} span={3}>
         <span style={style.time}>{props.time}</span>
       </Col>
@@ -41,7 +42,8 @@ function TimeSlotGroup (props) {
           openAddEventModal={props.openAddEventModal}
         />
       ))}
-      {props.children}
+      {props.events &&
+        props.events.map (event => <EventHighlighter event={event} />)}
     </Row>
   );
 }
