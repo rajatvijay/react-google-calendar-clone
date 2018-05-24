@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
 import {generateWeekViewCoordinates} from '../../utils';
+import {eventHighlighter} from '../styles';
+
 class EventHighlighter extends Component {
   state = {
     showEditEventModal: false,
@@ -89,15 +91,7 @@ class EventHighlighter extends Component {
               this.props.event,
               this.props.startDate
             ),
-            position: 'absolute',
-            background: 'green',
-            border: '1px solid white',
-            borderRadius: '4px',
-            color: 'white',
-            padding: '2px 4px',
-            fontSize: '12px',
-            zIndex: 1,
-            cursor: 'pointer',
+            ...eventHighlighter,
           }}
         >
           {this.props.event.title} <br />
