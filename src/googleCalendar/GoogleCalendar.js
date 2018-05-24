@@ -11,7 +11,7 @@ class GoogleCalendar extends Component {
   addNewEvent = event => {
     event = {
       ...event,
-      id: generateUniqueId (event),
+      id: CalendarEventHandler.generateId (event),
     };
     this.setState (previousSate => ({
       events: CalendarEventHandler.add (previousSate.events, event),

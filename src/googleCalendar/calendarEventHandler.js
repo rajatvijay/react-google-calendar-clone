@@ -99,7 +99,7 @@ const CalendarEventHandler = (function () {
   return {
     add: addEvent,
     delete: deleteEvent,
-    update: update,
+    update: updateEvent,
     generateId: generateUniqueId,
     generateWeekViewCoordinates: getBoxQuadsFromEvent,
   };
