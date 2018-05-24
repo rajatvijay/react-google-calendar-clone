@@ -43,14 +43,7 @@ function TimeSlotGroup (props) {
           openAddEventModal={props.openAddEventModal}
         />
       ))}
-      {props.events &&
-        props.events.map ((event, index) => (
-          <EventHighlighter
-            key={event.title + event.end + event.start}
-            index={index}
-            event={event}
-          />
-        ))}
+      {props.children}
     </Row>
   );
 }

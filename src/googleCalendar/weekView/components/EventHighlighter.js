@@ -1,10 +1,11 @@
 import React from 'react';
 import moment from 'moment';
 
-function getBoxQuadsFromEvent (event, index) {
+function getBoxQuadsFromEvent (event) {
   const start = moment (event.start);
   const end = moment (event.end);
   const duration = moment.duration (end.diff (start));
+  // const offset =
 
   // Calculating Top
   const top = start.minutes () === 30 ? '50%' : '0%';
@@ -15,11 +16,11 @@ function getBoxQuadsFromEvent (event, index) {
 
   // Calculating width
   const daysDiff = duration.days ();
-  const width = (daysDiff + 1) * 12.5 - (index + 1) + '%';
+  const width = (daysDiff + 1) * 12.5 + '%';
 
   // Calculating Left
   const weekDay = start.weekday ();
-  const left = (weekDay + 1) * 12.5 + index + '%';
+  const left = (weekDay + 1) * 12.5 + '%';
 
   return {
     top,
@@ -33,8 +34,9 @@ function EventHighlighter (props) {
   console.log ('event highlighter');
   return (
     <div
+      onClick={props.onEdit}
       style={{
-        ...getBoxQuadsFromEvent (props.event, props.index),
+        ...getBoxQuadsFromEvent (props.event),
         position: 'absolute',
         background: 'green',
         border: '1px solid white',

@@ -4,6 +4,7 @@ import AddEventModal from './AddEventModal';
 import WeekToolbar from './WeekToolbar';
 import WeekHeader from './WeekHeader';
 import TimeSlotGroup from './TimeSlotGroup';
+import EventHighlighter from './EventHighlighter';
 
 // TODO: Fix this!
 const times = [
@@ -171,7 +172,16 @@ class WeekView extends Component {
             weekDays={weekDays}
             events={events[time]}
             openAddEventModal={this.openAddEventModal}
-          />
+          >
+            {events[time] &&
+              events[time].map (event => (
+                <EventHighlighter
+                  onEdit={() => this.openAddEventModal (event.start, time)}
+                  key={event.title + event.end + event.start}
+                  event={event}
+                />
+              ))}
+          </TimeSlotGroup>
         ))}
       </div>
     );
