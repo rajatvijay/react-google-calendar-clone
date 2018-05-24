@@ -44,7 +44,14 @@ function EventHighlighter (props) {
         fontSize: '12px',
       }}
     >
-      {props.event.title}
+      {props.event.title} <br />
+      <span style={{fontSize: 10}}>
+        {moment (props.event.start).format ('hh:mm a')}
+        {' '}
+        -
+        {' '}
+        {moment (props.event.end).format ('hh:mm a')}
+      </span>
     </div>
   );
 }
