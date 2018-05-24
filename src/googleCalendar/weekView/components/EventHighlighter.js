@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-function getBoxQuadsFromEvent (event) {
+function getBoxQuadsFromEvent (event, index) {
   const start = moment (event.start);
   const end = moment (event.end);
   const duration = moment.duration (end.diff (start));
@@ -15,11 +15,11 @@ function getBoxQuadsFromEvent (event) {
 
   // Calculating width
   const daysDiff = duration.days ();
-  const width = (daysDiff + 1) * 12.5 - 2 + '%';
+  const width = (daysDiff + 1) * 12.5 - (index + 1) + '%';
 
   // Calculating Left
   const weekDay = start.weekday ();
-  const left = (weekDay + 1) * 12.5 + '%';
+  const left = (weekDay + 1) * 12.5 + index + '%';
 
   return {
     top,
@@ -34,7 +34,7 @@ function EventHighlighter (props) {
   return (
     <div
       style={{
-        ...getBoxQuadsFromEvent (props.event),
+        ...getBoxQuadsFromEvent (props.event, props.index),
         position: 'absolute',
         background: 'green',
         border: '1px solid white',
