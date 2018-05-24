@@ -6,6 +6,7 @@ import WeekHeader from './WeekHeader';
 import TimeSlotGroup from './TimeSlotGroup';
 import EventHighlighter from './EventHighlighter';
 import {times, getAllDaysInTheWeek} from '../../utils';
+import {container} from '../styles';
 
 class WeekView extends Component {
   state = {
@@ -99,7 +100,7 @@ class WeekView extends Component {
     } = this.state;
     const {events} = this.props;
     return (
-      <div>
+      <div style={container}>
 
         <AddEventModal
           visible={showAddEventModal}
