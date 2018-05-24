@@ -63,7 +63,7 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
   const weekStart = currentDate.clone ().startOf ('week');
 
   const days = Array.from (Array (7))
-    .map ((day, index) => index + 1)
+    .map ((day, index) => index)
     .map (day =>
       moment (weekStart).add (day, 'days').set ('minutes', 0).set ('seconds', 0)
     )
