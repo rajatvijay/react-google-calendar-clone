@@ -53,14 +53,14 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
 
 function collectEvent (eventCollector, event) {
   const hour = moment (event.start).hours ();
-  event = {
+  event = segregateEvent ({
     ...event,
     hour,
-  };
+  });
   if (eventCollector[hour]) {
-    eventCollector[hour].push (event);
+    eventCollector[hour].push (...event);
   } else {
-    eventCollector[hour] = [event];
+    eventCollector[hour] = [...event];
   }
   return eventCollector;
 }
@@ -72,6 +72,28 @@ function getEventsForWeek (events, startDate) {
       return collectEvent (acc, event);
     }
   }, {});
+}
+
+function segregateEvent (event) {
+  const start = moment (event.start);
+  const end = moment (event.end);
+  if (start.week () !== end.week ()) {
+    const firstWeekEnd = start
+      .clone ()
+      .endOf ('week')
+      .set ('hours', end.hours ())
+      .set ('minutes', end.minutes ())
+      .set ('seconds', end.seconds ());
+    const lastWeekStart = end
+      .clone ()
+      .startOf ('week')
+      .set ('hours', start.hours ())
+      .set ('minutes', start.minutes ())
+      .set ('seconds', start.seconds ());
+    return [{...event, end: +firstWeekEnd}, {...event, start: +lastWeekStart}];
+  } else {
+    return [event];
+  }
 }
 
 class WeekView extends Component {

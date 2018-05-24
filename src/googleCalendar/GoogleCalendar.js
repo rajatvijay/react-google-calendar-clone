@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import WeekView from './weekView';
+import moment from 'moment';
 
 class GoogleCalendar extends Component {
   state = {
