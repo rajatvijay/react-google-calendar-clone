@@ -7,6 +7,15 @@ class GoogleCalendar extends Component {
     events: {},
   };
 
+  /**
+   * Add new event in the event list in the state
+   * @param event :Object
+   * {
+   *  start: Time stamp for the start of the event :timeStamp,
+   *  title: Title fo the new event :String,
+   *  end: Time stamp for the end of the event :timeStamp,
+   * }
+  */
   addNewEvent = event => {
     event = {
       ...event,
@@ -17,7 +26,16 @@ class GoogleCalendar extends Component {
     }));
   };
 
-  // Fix this
+  /**
+   * Updates an already existing event in the state event list
+   * @param event eventID id of the event :String
+   * @param updatedEvent updated details of the event :Object
+   * {
+   *  start: Time stamp for the start of the event :timeStamp,
+   *  title: Title fo the new event :String,
+   *  end: Time stamp for the end of the event :timeStamp,
+   * }
+  */
   updateEvent = (eventId, updatedEvent) => {
     this.setState (previousState => {
       return {
@@ -30,6 +48,10 @@ class GoogleCalendar extends Component {
     });
   };
 
+  /**
+   * Deletes an event from the event list in the state
+   * @param eventId id of the event :String
+  */
   deleteEvent = eventId => {
     this.setState (previousState => {
       return {
