@@ -4,25 +4,22 @@ import moment from 'moment';
 function getBoxQuadsFromEvent (event) {
   const start = moment (event.start);
   const end = moment (event.end);
-  console.log (start);
-  console.log (end);
   const duration = moment.duration (end.diff (start));
-  console.log (duration);
 
   // Calculating Top
   const top = start.minutes () === 30 ? '50%' : '0%';
 
   // Calculating height
-  const hoursDiff = end.hours () - start.hours ();
-  const height = hoursDiff === 0 ? '50%' : hoursDiff * 100 + '%';
+  const timeFactor = duration.hours () + duration.minutes () / 60;
+  const height = timeFactor * 100 + '%';
 
   // Calculating width
-  const daysDiff = end.days () - start.days ();
+  const daysDiff = duration.days ();
   const width = (daysDiff + 1) * 12.5 + '%';
 
   // Calculating Left
   const weekDay = start.weekday ();
-  const left = weekDay * 12.5 + '%';
+  const left = (weekDay + 1) * 12.5 + '%';
 
   return {
     top,
