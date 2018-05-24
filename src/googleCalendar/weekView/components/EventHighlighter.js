@@ -15,7 +15,7 @@ function getBoxQuadsFromEvent (event) {
 
   // Calculating width
   const daysDiff = duration.days ();
-  const width = (daysDiff + 1) * 12.5 + '%';
+  const width = (daysDiff + 1) * 12.5 - 2 + '%';
 
   // Calculating Left
   const weekDay = start.weekday ();
