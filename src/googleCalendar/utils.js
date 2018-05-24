@@ -122,3 +122,17 @@ export const generateWeekViewCoordinates = (event, startDate) => {
     width: width + '%',
   };
 };
+
+/**
+ * Checks if the dateStamp represents todays date
+ * @param {dateStamp} dateStamp - Date Stamp to check
+ * @return {boolean}
+ */
+export const isTodaysDate = dateStamp => {
+  const today = moment ();
+  dateStamp = moment (dateStamp);
+  return (
+    moment.duration (dateStamp.diff (today)).days () === 0 &&
+    today.day () === dateStamp.day ()
+  );
+};

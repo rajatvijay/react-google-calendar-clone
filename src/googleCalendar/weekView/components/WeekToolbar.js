@@ -1,4 +1,4 @@
-import {Row, Col, Button, Icon} from 'antd';
+import {Row, Col, Button, Icon, Tooltip} from 'antd';
 import React from 'react';
 import {
   toolbar,
@@ -18,7 +18,9 @@ function WeekToolbar (props) {
         <Icon type="calendar" style={spacify} />Meeting Calendar
       </Col>
       <Col span={3} offset={8} style={alignRight}>
-        <Button onClick={props.goToToday}>Today</Button>
+        <Tooltip placement="topLeft" title={moment ().format ('dddd, MMM D')}>
+          <Button onClick={props.goToToday}>Today</Button>
+        </Tooltip>
       </Col>
 
       <Col span={2} style={weekButtons}>
