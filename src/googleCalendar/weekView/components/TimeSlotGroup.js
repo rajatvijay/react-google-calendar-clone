@@ -36,6 +36,7 @@ function TimeSlotGroup (props) {
       </Col>
       {props.weekDays.map (day => (
         <TimeSlot
+          key={day.dateStamp}
           dateStamp={day.dateStamp}
           time={props.time}
           events={props.events}
@@ -43,7 +44,9 @@ function TimeSlotGroup (props) {
         />
       ))}
       {props.events &&
-        props.events.map (event => <EventHighlighter event={event} />)}
+        props.events.map (event => (
+          <EventHighlighter key={event.title + event.end} event={event} />
+        ))}
     </Row>
   );
 }

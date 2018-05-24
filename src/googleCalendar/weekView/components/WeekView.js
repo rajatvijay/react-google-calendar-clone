@@ -1,11 +1,9 @@
 import React, {Component} from 'react';
-import {Row, Col} from 'antd';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
 import WeekToolbar from './WeekToolbar';
 import WeekHeader from './WeekHeader';
 import TimeSlotGroup from './TimeSlotGroup';
-import EventHighlighter from './EventHighlighter';
 
 // TODO: Fix this!
 const times = [
@@ -34,30 +32,6 @@ const times = [
   '23',
   '24',
 ].map (time => Number (time));
-
-const style = {
-  col: {
-    border: '#e0e0e0 1px solid',
-  },
-  weekDays: {
-    height: 100,
-  },
-  weekDayName: {
-    fontSize: 12,
-    lineHeight: '32px',
-    textTransform: 'capitalize',
-    color: '#757575',
-    marginLeft: 10,
-  },
-  slot: {
-    height: 40,
-    cursor: 'pointer',
-  },
-  time: {
-    fontSize: 10,
-    color: '#212121',
-  },
-};
 
 function getAllDaysInTheWeek (currentDate = moment ()) {
   const weekStart = currentDate.clone ().startOf ('week');
@@ -141,20 +115,6 @@ class WeekView extends Component {
     });
   };
 
-  // TODO: revise the logic
-  getCoordinatesForEventHighlighter = (eventStart, eventEnd) => {
-    const duration = moment
-      .duration (moment (eventEnd).diff (moment (eventStart)))
-      .as ('hours');
-
-    const startMinutes = moment (eventStart).minutes ();
-    return {
-      height: duration * 100 + '%',
-      top: startMinutes === 30 ? '50%' : '0',
-      width: '100%',
-    };
-  };
-
   onOkAddEventModal = title => {
     this.props.onNewEvent ({
       title,
@@ -172,22 +132,6 @@ class WeekView extends Component {
       eventStart: +dates[0],
       eventEnd: +dates[1],
     });
-  };
-
-  getEventsForThisTime = (dateStamp, time, allEvents) => {
-    console.log (allEvents, new Date (dateStamp));
-    const startTimeStamp = moment (dateStamp)
-      .set ('hour', time)
-      .set ('minutes', 0)
-      .set ('seconds', 0);
-    const startTimeStampPlus30 = startTimeStamp.clone ().add (30, 'minutes');
-    console.log (new Date (+startTimeStamp), +startTimeStamp);
-    console.log (
-      (allEvents[+startTimeStamp.toString ()] || [])
-        .concat (allEvents[+startTimeStampPlus30.toString ()] || [])
-    );
-
-    return allEvents[+startTimeStamp] || [];
   };
 
   render () {
@@ -222,6 +166,7 @@ class WeekView extends Component {
 
         {times.map (time => (
           <TimeSlotGroup
+            key={time}
             time={time}
             weekDays={weekDays}
             events={events[time]}

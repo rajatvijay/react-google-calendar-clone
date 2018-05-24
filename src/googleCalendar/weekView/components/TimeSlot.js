@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col} from 'antd';
+import {Col} from 'antd';
 
 // TODO: Remove the duplication
 const style = {
@@ -32,8 +32,7 @@ function TimeSlot (props) {
       style={{...style.col, ...style.slot}}
       span={3}
       onClick={() => props.openAddEventModal (props.dateStamp, props.time)}
-    >
-    </Col>
+    />
   );
 }
 
