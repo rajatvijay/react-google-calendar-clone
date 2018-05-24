@@ -1,63 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
-
-function getBoxQuadsFromEvent (event, startDate) {
-  const start = moment (event.start);
-  const end = moment (event.end);
-  const duration = moment.duration (end.diff (start));
-  const weekStart = moment (startDate);
-
-  // Calculating Top
-  const top = start.minutes () === 30 ? '50%' : '0%';
-
-  // Calculating height
-  const timeFactor = duration.hours () + duration.minutes () / 60;
-  const height = timeFactor * 100;
-
-  let left, width;
-  if (weekStart.week () === start.week ()) {
-    const weekDay = start.weekday ();
-    left = (weekDay + 1) * 12.5;
-  }
-
-  if (
-    weekStart.week () === start.week () &&
-    weekStart.week () === end.week ()
-  ) {
-    const daysDiff = duration.days ();
-    width = (daysDiff + 1) * 12.5;
-  }
-
-  if (weekStart.week () > start.week () && weekStart.week () === end.week ()) {
-    const daysDiff = moment
-      .duration (
-        end.diff (
-          weekStart
-            .startOf ('week')
-            .set ('hours', start.hours ())
-            .set ('minutes', start.minutes ())
-        )
-      )
-      .days ();
-    width = (daysDiff + 1) * 12.5;
-  }
-
-  if (weekStart.week () > start.week ()) {
-    left = 12.5;
-  }
-
-  if (weekStart.week () < end.week ()) {
-    width = 100 - left;
-  }
-
-  return {
-    top: top + '%',
-    left: left + '%',
-    height: height + '%',
-    width: width + '%',
-  };
-}
+import CalendarEventHandler from '../../calendarEventHandler';
 
 class EventHighlighter extends Component {
   state = {
@@ -116,7 +60,10 @@ class EventHighlighter extends Component {
         <div
           onClick={this.openEditEventModal}
           style={{
-            ...getBoxQuadsFromEvent (this.props.event, this.props.startDate),
+            ...CalendarEventHandler.generateWeekViewCoordinates (
+              this.props.event,
+              this.props.startDate
+            ),
             position: 'absolute',
             background: 'green',
             border: '1px solid white',
