@@ -3,9 +3,18 @@ import WeekView from './weekView';
 import CalendarEventHandler from './calendarEventHandler';
 
 class GoogleCalendar extends Component {
-  state = {
-    events: {},
-  };
+  constructor (props) {
+    super (props);
+
+    this.state = {
+      events: JSON.parse (localStorage.getItem ('events')) || {},
+    };
+
+    // saving data to the local storage
+    window.addEventListener ('beforeunload', () => {
+      localStorage.setItem ('events', JSON.stringify (this.state.events));
+    });
+  }
 
   /**
    * Add new event in the event list in the state

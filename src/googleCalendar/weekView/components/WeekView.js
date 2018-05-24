@@ -39,6 +39,9 @@ class WeekView extends Component {
     });
   };
 
+  /**
+   * Brings today's date in the view
+   */
   goToToday = () => {
     this.setState ({
       startDate: +moment (),
