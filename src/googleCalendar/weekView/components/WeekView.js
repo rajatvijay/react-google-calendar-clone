@@ -104,6 +104,7 @@ class WeekView extends Component {
         <AddEventModal
           visible={showAddEventModal}
           onCancel={this.onCloseAddEventModal}
+          onClose={this.onCloseAddEventModal}
           onOk={this.onOkAddEventModal}
           eventStart={eventStart}
           eventEnd={eventEnd}

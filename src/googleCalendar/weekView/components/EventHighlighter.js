@@ -57,6 +57,15 @@ class EventHighlighter extends Component {
     });
   };
 
+  /**
+   * Closes modal and does nothing more!
+   */
+  closeModal = () => {
+    this.setState ({
+      showEditEventModal: false,
+    });
+  };
+
   render () {
     const {showEditEventModal, eventNewStart, eventNewEnd} = this.state;
     return (
@@ -65,6 +74,7 @@ class EventHighlighter extends Component {
           editMode={true}
           visible={showEditEventModal}
           onCancel={this.deleteEvent}
+          onClose={this.closeModal}
           onOk={this.updateEvent}
           eventStart={eventNewStart}
           eventEnd={eventNewEnd}

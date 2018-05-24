@@ -30,7 +30,7 @@ class AddEventModal extends Component {
       <Modal
         visible={this.props.visible}
         onOk={this.handleOk}
-        onCancel={this.props.onCancel}
+        onCancel={this.props.onClose}
         footer={[
           <Button key="back" onClick={this.props.onCancel}>
             {this.props.editMode ? 'Delete' : 'Cancel'}
