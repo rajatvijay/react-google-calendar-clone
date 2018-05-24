@@ -8,6 +8,22 @@ class AddEventModal extends Component {
   };
 
   /**
+   * To show the title auto fill and
+   * re-initialize the title on adding new event
+   */
+  static getDerivedStateFromProps (nextProps) {
+    if (nextProps.eventTitle) {
+      return {
+        title: nextProps.eventTitle,
+      };
+    } else {
+      return {
+        title: '',
+      };
+    }
+  }
+
+  /**
    * Sets the title in the state
    * @param {event} event - JS/React event
    */

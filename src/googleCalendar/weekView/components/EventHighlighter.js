@@ -38,6 +38,7 @@ class EventHighlighter extends Component {
    * Open the edit event modal and initializes the start and end time
    */
   openEditEventModal = () => {
+    console.log (this.props.event.title);
     this.setState ({
       showEditEventModal: true,
       eventNewStart: this.props.event.start,
@@ -72,6 +73,7 @@ class EventHighlighter extends Component {
       <React.Fragment>
         <AddEventModal
           editMode={true}
+          eventTitle={this.props.event.title}
           visible={showEditEventModal}
           onCancel={this.deleteEvent}
           onClose={this.closeModal}
