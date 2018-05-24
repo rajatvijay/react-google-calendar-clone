@@ -39,6 +39,13 @@ class WeekView extends Component {
     });
   };
 
+  goToToday = () => {
+    this.setState ({
+      startDate: +moment (),
+      weekDays: getAllDaysInTheWeek (),
+    });
+  };
+
   /**
    * Opens the add event modal and initialize the date from the cell
    * @param {timeStamp} dateStamp - DateStamp of the cell the user clicked
@@ -116,6 +123,7 @@ class WeekView extends Component {
           goToPreviousWeek={this.goToPreviousWeek}
           goToNextWeek={this.goToNextWeek}
           startDate={startDate}
+          goToToday={this.goToToday}
         />
 
         <WeekHeader weekDays={weekDays} />
