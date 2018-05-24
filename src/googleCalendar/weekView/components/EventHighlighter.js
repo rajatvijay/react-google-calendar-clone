@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import moment from 'moment';
 import AddEventModal from './AddEventModal';
-import CalendarEventHandler from '../../calendarEventHandler';
-
+import {generateWeekViewCoordinates} from '../../utils';
 class EventHighlighter extends Component {
   state = {
     showEditEventModal: false,
@@ -60,7 +59,7 @@ class EventHighlighter extends Component {
         <div
           onClick={this.openEditEventModal}
           style={{
-            ...CalendarEventHandler.generateWeekViewCoordinates (
+            ...generateWeekViewCoordinates (
               this.props.event,
               this.props.startDate
             ),

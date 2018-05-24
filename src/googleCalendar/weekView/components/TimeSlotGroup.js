@@ -1,7 +1,6 @@
 import React from 'react';
 import {Row, Col} from 'antd';
 import TimeSlot from './TimeSlot';
-import EventHighlighter from './EventHighlighter';
 
 // TODO: Remove the duplication
 const style = {
