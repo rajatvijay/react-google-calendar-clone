@@ -1,7 +1,7 @@
 import React from 'react';
 import {Row, Col} from 'antd';
 import TimeSlot from './TimeSlot';
-import {col, slot, row, timeCol, timeString} from '../styles';
+import {row, timeCol, timeString} from '../styles';
 import moment from 'moment';
 
 function TimeSlotGroup (props) {

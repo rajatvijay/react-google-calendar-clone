@@ -7,7 +7,6 @@ import {
   weekDates,
   lightHighlighter,
 } from '../styles';
-import moment from 'moment';
 import {isTodaysDate} from '../../utils';
 
 function WeekHeader (props) {
@@ -17,7 +16,6 @@ function WeekHeader (props) {
       {props.weekDays.map (day => (
         <Col
           key={day.dateStamp}
-          style={{...col, ...weekDays}}
           span={3}
           style={
             isTodaysDate (day.dateStamp)
