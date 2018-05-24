@@ -31,7 +31,9 @@ function TimeSlotGroup (props) {
   return (
     <Row type="flex" key={props.time} style={{position: 'relative'}}>
       <Col style={{...style.col, ...style.slot}} span={3}>
-        <span style={style.time}>{props.time}</span>
+        <span style={style.time}>
+          {props.time <= 12 ? props.time + 'am' : props.time - 12 + 'pm'}
+        </span>
       </Col>
       {props.weekDays.map (day => (
         <TimeSlot
