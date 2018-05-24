@@ -1,6 +1,8 @@
 import React from 'react';
 import {Row, Col} from 'antd';
+import TimeSlot from './TimeSlot';
 
+// TODO: Remove the duplication
 const style = {
   col: {
     border: '#e0e0e0 1px solid',
@@ -32,13 +34,14 @@ function TimeSlotGroup (props) {
         <span style={style.time}>{props.time}</span>
       </Col>
       {props.weekDays.map (day => (
-        <Col
-          key={day.dateStamp}
-          style={{...style.col, ...style.slot}}
-          span={3}
-          onClick={() => props.openAddEventModal (day.dateStamp, props.time)}
+        <TimeSlot
+          dateStamp={day.dateStamp}
+          time={props.time}
+          events={props.events}
+          openAddEventModal={props.openAddEventModal}
         />
       ))}
+      {props.children}
     </Row>
   );
 }

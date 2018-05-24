@@ -5,6 +5,7 @@ import AddEventModal from './AddEventModal';
 import WeekToolbar from './WeekToolbar';
 import WeekHeader from './WeekHeader';
 import TimeSlotGroup from './TimeSlotGroup';
+import EventHighlighter from './EventHighlighter';
 
 // TODO: Fix this!
 const times = [
@@ -75,18 +76,28 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
   return days;
 }
 
-const EventDisplayer = props => (
-  <div
-    style={{
-      position: 'absolute',
-      top: props.top,
-      left: 0,
-      height: props.highlightHeight,
-      right: 0,
-      background: 'green',
-    }}
-  />
-);
+function collectEvent (eventCollector, event) {
+  const hour = moment (event.start).hours ();
+  event = {
+    ...event,
+    hour,
+  };
+  if (eventCollector[hour]) {
+    eventCollector[hour].push (event);
+  } else {
+    eventCollector[hour] = [event];
+  }
+  return eventCollector;
+}
+
+function getEventsForWeek (events, startDate) {
+  const weekNo = moment (startDate).week ();
+  return events.reduce ((acc, event) => {
+    if (event.week === weekNo) {
+      return collectEvent (acc, event);
+    }
+  }, {});
+}
 
 class WeekView extends Component {
   state = {
@@ -149,6 +160,7 @@ class WeekView extends Component {
       title,
       start: this.state.eventStart,
       end: this.state.eventEnd,
+      week: moment (this.state.eventStart).week (),
     });
     this.setState ({
       showAddEventModal: false,
@@ -186,6 +198,8 @@ class WeekView extends Component {
       eventEnd,
       startDate,
     } = this.state;
+    const events = getEventsForWeek (this.props.events, startDate);
+    console.log (events);
     return (
       <div>
 
@@ -210,8 +224,12 @@ class WeekView extends Component {
           <TimeSlotGroup
             time={time}
             weekDays={weekDays}
+            events={events[time]}
             openAddEventModal={this.openAddEventModal}
-          />
+          >
+            {events[time] &&
+              events[time].map (event => <EventHighlighter {...event} />)}
+          </TimeSlotGroup>
         ))}
       </div>
     );
@@ -219,16 +237,3 @@ class WeekView extends Component {
 }
 
 export default WeekView;
-
-// {this.getEventsForThisTime (
-//   day.dateStamp,
-//   time,
-//   allEvents
-// ).map (event => (
-//   <EventDisplayer
-//     top={this.getTopValueForEventDiplayer (event)}
-//     highlightHeight={this.getHeightValueForEventDisplayer (
-//       event
-//     )}
-//   />
-// ))}
