@@ -206,7 +206,6 @@ class WeekView extends Component {
 
         <WeekHeader weekDays={weekDays} />
 
-        {/* Slots */}
         {times.map (time => (
           <TimeSlotGroup
             time={time}
