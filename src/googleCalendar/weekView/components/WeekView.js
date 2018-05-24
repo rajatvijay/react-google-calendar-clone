@@ -63,7 +63,7 @@ function getAllDaysInTheWeek (currentDate = moment ()) {
     .map (day => moment (weekStart).add (day, 'days'))
     .map (momentObj => ({
       date: momentObj.date (),
-      timeStamp: +momentObj,
+      dateStamp: +momentObj,
       weekDayName: momentObj.format ('ddd'),
     }));
 
@@ -245,48 +245,47 @@ class WeekView extends Component {
         {/* WeekDays */}
         <Row type="flex">
           <Col style={{...style.col, ...style.weekDays}} span={3} />
-          <React.Fragment>
-            {weekDays.map (day => (
-              <Col style={{...style.col, ...style.weekDays}} span={3}>
-                <p style={style.weekDayName}>{day.weekDayName}</p>
-                <p style={style.weekDayName}>{day.date}</p>
-              </Col>
-            ))}
-          </React.Fragment>
+          {weekDays.map (day => (
+            <Col
+              key={day.dateStamp}
+              style={{...style.col, ...style.weekDays}}
+              span={3}
+            >
+              <p style={style.weekDayName}>{day.weekDayName}</p>
+              <p style={style.weekDayName}>{day.date}</p>
+            </Col>
+          ))}
         </Row>
 
         {/* Slots */}
-        <React.Fragment>
-          {times.map (time => (
-            <Row type="flex">
-              <Col style={{...style.col, ...style.slot}} span={3}>
-                <span style={style.time}>{time}</span>
-              </Col>
-              <React.Fragment>
-                {weekDays.map (day => (
-                  <Col
-                    style={{...style.col, ...style.slot}}
-                    span={3}
-                    onClick={() => this.openAddEventModal (day.timeStamp, time)}
-                  >
-                    {this.getEventsForThisTime (
-                      day.timeStamp,
-                      time,
-                      allEvents
-                    ).map (event => (
-                      <EventDisplayer
-                        top={this.getTopValueForEventDiplayer (event)}
-                        highlightHeight={this.getHeightValueForEventDisplayer (
-                          event
-                        )}
-                      />
-                    ))}
-                  </Col>
+        {times.map (time => (
+          <Row type="flex" key={time}>
+            <Col style={{...style.col, ...style.slot}} span={3}>
+              <span style={style.time}>{time}</span>
+            </Col>
+            {weekDays.map (day => (
+              <Col
+                key={day.dateStamp}
+                style={{...style.col, ...style.slot}}
+                span={3}
+                onClick={() => this.openAddEventModal (day.dateStamp, time)}
+              >
+                {this.getEventsForThisTime (
+                  day.dateStamp,
+                  time,
+                  allEvents
+                ).map (event => (
+                  <EventDisplayer
+                    top={this.getTopValueForEventDiplayer (event)}
+                    highlightHeight={this.getHeightValueForEventDisplayer (
+                      event
+                    )}
+                  />
                 ))}
-              </React.Fragment>
-            </Row>
-          ))}
-        </React.Fragment>
+              </Col>
+            ))}
+          </Row>
+        ))}
       </div>
     );
   }
